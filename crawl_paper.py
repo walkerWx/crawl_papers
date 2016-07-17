@@ -22,6 +22,7 @@ aaai_paper_url_f = 'data/aaai_paper_url.dat'
 icml_paper_url_f = 'data/icml_paper_url.dat'
 ijcai_paper_url_f = 'data/ijcai_paper_url.dat'
 nips_paper_url_f = 'data/nips_paper_url.dat'
+acl_paper_url_f = 'data/acl_paper_url.dat'
 
 ai_urls = [url.rstrip('\n') for url in open(ai_paper_url_f)]
 pami_urls = [url.rstrip('\n') for url in open(pami_paper_url_f)] 
@@ -31,6 +32,8 @@ aaai_urls = [url.rstrip('\n') for url in open(aaai_paper_url_f)]
 icml_urls = [url.rstrip('\n') for url in open(icml_paper_url_f)] 
 ijcai_urls = [url.rstrip('\n') for url in open(ijcai_paper_url_f)] 
 nips_urls = [url.rstrip('\n') for url in open(nips_paper_url_f)] 
+acl_urls = [url.rstrip('\n') for url in open(acl_paper_url_f)] 
+
 
  
 pattern_str = {}
@@ -255,9 +258,17 @@ def download(urls, directory):
             f.close()
             print "Download " + pdf_url + " complete!"
 
+        elif url.startswith('http://aclweb.org'):
+            if not url.endswith('pdf'):
+                url = url + '.pdf'
+            response = urllib2.urlopen(pdf_url)
+            f = open(pdf_f, 'wb')
+            f.write(response.read())
+            f.close()
+            print "Download " + pdf_url + " complete!"
+            
 
-
-download(nips_urls, 'papers/nips/')
+download(acl_urls, 'papers/acl/')
 
 
 '''

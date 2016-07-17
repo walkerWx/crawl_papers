@@ -45,18 +45,19 @@ def crawl_url(conference_url, url_f, pattern):
         f.write('\n')
     f.close()
 
-conference_url = 'http://dblp.uni-trier.de/db/conf/nips/'
-volumn_url_f = 'data/nips_volumn_url.dat'
-paper_url_f = 'data/nips_paper_url.dat'
+conference_url = 'http://dblp.uni-trier.de/db/conf/acl/'
+volumn_url_f = 'data/acl_volumn_url.dat'
+paper_url_f = 'data/acl_paper_url.dat'
 dblp_volumn_pattern = '<nav.*?publ">.*?<a href="(.*?)">'
 dblp_paper_pattern = '<nav.*?publ">.*?<a href="(.*?)">'
 
 #crawl_url(conference_url, volumn_url_f, dblp_volumn_pattern)
 
-#urls = [url.rstrip('\n') for url in open(volumn_url_f)]
-#for url in urls:
-#    crawl_url(url, paper_url_f, dblp_paper_pattern)
+urls = [url.rstrip('\n') for url in open(volumn_url_f)]
+for url in urls:
+    crawl_url(url, paper_url_f, dblp_paper_pattern)
 
+'''
 urls = [url.rstrip('\n') for url in open(paper_url_f)]
 urls.sort()
 f = open(paper_url_f, 'w')
@@ -64,3 +65,4 @@ for url in urls:
     f.write(url);
     f.write('\n')
 f.close()
+'''
