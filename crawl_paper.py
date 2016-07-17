@@ -183,7 +183,6 @@ def search(url, pattern):
         if hasattr(e, "reason"):
             print e.reason
     content = response.read().decode('utf-8')
-
     items = re.findall(re.compile(pattern, re.S), content)
 
     '''
@@ -285,7 +284,7 @@ def download(urls, directory):
 
         elif url.startswith('http://dx.doi.org'):
 
-            pattern = 'id="full-text-pdf" href=\'(.*?)\' class="pdf"'            
+            pattern = 'id="full-text-pdf".*?href=\'(.*?)\'.*?>'            
             items = search(url, pattern)
             full_text_pdf_url = 'http://ieeexplore.ieee.org' + items[0]
             pattern = '<frame src="(http://ieeexplore.ieee.org.*?\.pdf.*?)" frameborder=0 />'
