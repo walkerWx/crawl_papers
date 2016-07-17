@@ -20,7 +20,7 @@ ijcv_paper_url_f = 'data/ijcv_paper_url.dat'
 jmlr_paper_url_f = 'data/jmlr_paper_url.dat'
 aaai_paper_url_f = 'data/aaai_paper_url.dat'
 cvpr_paper_url_f = 'data/cvpr_paper_url.dat'
-
+iccv_paper_url_f = 'data/iccv_paper_url.dat'
 icml_paper_url_f = 'data/icml_paper_url.dat'
 ijcai_paper_url_f = 'data/ijcai_paper_url.dat'
 nips_paper_url_f = 'data/nips_paper_url.dat'
@@ -32,7 +32,7 @@ ijcv_urls = [url.rstrip('\n') for url in open(ijcv_paper_url_f)]
 jmlr_urls = [url.rstrip('\n') for url in open(jmlr_paper_url_f)] 
 aaai_urls = [url.rstrip('\n') for url in open(aaai_paper_url_f)] 
 cvpr_urls = [url.rstrip('\n') for url in open(cvpr_paper_url_f)] 
-
+iccv_urls = [url.rstrip('\n') for url in open(iccv_paper_url_f)] 
 icml_urls = [url.rstrip('\n') for url in open(icml_paper_url_f)] 
 ijcai_urls = [url.rstrip('\n') for url in open(ijcai_paper_url_f)] 
 nips_urls = [url.rstrip('\n') for url in open(nips_paper_url_f)] 
@@ -316,7 +316,7 @@ def download(urls, directory):
             f.close()
             print "Download " + pdf_url + " complete!"
 
-download(cvpr_urls, 'papers/cvpr/')
+download(iccv_urls, 'papers/iccv/')
 
 '''
 for url in aaai_urls:

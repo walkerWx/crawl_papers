@@ -45,9 +45,9 @@ def crawl_url(conference_url, url_f, pattern):
         f.write('\n')
     f.close()
 
-conference_url = 'http://dblp.uni-trier.de/db/conf/cvpr/'
-volumn_url_f = 'data/cvpr_volumn_url.dat'
-paper_url_f = 'data/cvpr_paper_url.dat'
+conference_url = 'http://dblp.uni-trier.de/db/conf/iccv/'
+volumn_url_f = 'data/iccv_volumn_url.dat'
+paper_url_f = 'data/iccv_paper_url.dat'
 dblp_volumn_pattern = '<nav.*?publ">.*?<a href="(.*?)">'
 dblp_paper_pattern = '<nav.*?publ">.*?<a href="(.*?)">'
 
