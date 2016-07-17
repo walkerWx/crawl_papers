@@ -19,6 +19,8 @@ pami_paper_url_f = 'data/pami_paper_url.dat'
 ijcv_paper_url_f = 'data/ijcv_paper_url.dat'
 jmlr_paper_url_f = 'data/jmlr_paper_url.dat'
 aaai_paper_url_f = 'data/aaai_paper_url.dat'
+cvpr_paper_url_f = 'data/cvpr_paper_url.dat'
+
 icml_paper_url_f = 'data/icml_paper_url.dat'
 ijcai_paper_url_f = 'data/ijcai_paper_url.dat'
 nips_paper_url_f = 'data/nips_paper_url.dat'
@@ -29,6 +31,8 @@ pami_urls = [url.rstrip('\n') for url in open(pami_paper_url_f)]
 ijcv_urls = [url.rstrip('\n') for url in open(ijcv_paper_url_f)] 
 jmlr_urls = [url.rstrip('\n') for url in open(jmlr_paper_url_f)] 
 aaai_urls = [url.rstrip('\n') for url in open(aaai_paper_url_f)] 
+cvpr_urls = [url.rstrip('\n') for url in open(cvpr_paper_url_f)] 
+
 icml_urls = [url.rstrip('\n') for url in open(icml_paper_url_f)] 
 ijcai_urls = [url.rstrip('\n') for url in open(ijcai_paper_url_f)] 
 nips_urls = [url.rstrip('\n') for url in open(nips_paper_url_f)] 
@@ -126,7 +130,16 @@ def search_pami_url(url):
 
     detail_url = 'http://ieeexplore.ieee.org' + items[0]
 
-    search(detail_url, Conference.pami)
+    items = search(detail_url, pattern_str[Conference.pami])
+    found = False
+    for item in items:
+        print item.encode('utf-8')
+        if "wuhan" in item.lower() or "whu" in item.lower():
+            found = True
+    if found:
+        save_url(url, paper_found_f)
+        print "find one"
+    print ""
 
 def search_aaai(url):
 
@@ -137,8 +150,8 @@ def search_aaai(url):
     if len(items) == 0:
         save_url(url, paper_tbd_f)
         print "No author info! TBD.."
-    found = False
 
+    found = False
     for item in items:
         print item.encode('utf-8')
         if "wuhan" in item.lower() or "whu" in item.lower():
@@ -172,6 +185,8 @@ def search(url, pattern):
     content = response.read().decode('utf-8')
 
     items = re.findall(re.compile(pattern, re.S), content)
+
+    '''
     if len(items) == 0:
         driver = webdriver.PhantomJS()
         driver.set_page_load_timeout(60)
@@ -183,6 +198,7 @@ def search(url, pattern):
             #save_url(url, paper_tbd_f)
             print "Can not load page content, give up.."
             return 
+    '''
 
     return items
 
@@ -266,10 +282,42 @@ def download(urls, directory):
             f.write(response.read())
             f.close()
             print "Download " + pdf_url + " complete!"
-            
 
-download(acl_urls, 'papers/acl/')
+        elif url.startswith('http://dx.doi.org'):
 
+            pattern = 'id="full-text-pdf" href=\'(.*?)\' class="pdf"'            
+            items = search(url, pattern)
+            full_text_pdf_url = 'http://ieeexplore.ieee.org' + items[0]
+            pattern = '<frame src="(http://ieeexplore.ieee.org.*?\.pdf.*?)" frameborder=0 />'
+            items = search(full_text_pdf_url, pattern)
+
+            pdf_url = items[0]
+            pdf_f = directory + pdf_url.split('&')[-2].split('=')[-1] + '_' + pdf_url.split('&')[-1].split('=')[-1] + '.pdf'
+
+
+            cookie_f = 'cookies/cookie.txt'
+            cookie = cookielib.MozillaCookieJar(cookie_f)
+            handler = urllib2.HTTPCookieProcessor(cookie)
+            opener = urllib2.build_opener(handler)
+            user_agent = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
+            headers = { 'User-Agent' : user_agent }
+
+            try:
+                request = urllib2.Request(pdf_url, None, headers)
+                response = opener.open(request) 
+                cookie.save(ignore_discard=True, ignore_expires=True);
+            except urllib2.URLError, e:
+                if hasattr(e, "code"):
+                    print e.code
+                if hasattr(e, "reason"):
+                    print e.reason
+
+            f = open(pdf_f, 'wb')
+            f.write(response.read())
+            f.close()
+            print "Download " + pdf_url + " complete!"
+
+download(cvpr_urls, 'papers/cvpr/')
 
 '''
 for url in aaai_urls:
