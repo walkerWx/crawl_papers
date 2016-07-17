@@ -286,10 +286,17 @@ def download(urls, directory):
 
             pattern = 'id="full-text-pdf".*?href=\'(.*?)\'.*?>'            
             items = search(url, pattern)
+            if len(items) == 0:
+                save_url(url, paper_tbd_f)
+                print 'Time out!'
+                return 
             full_text_pdf_url = 'http://ieeexplore.ieee.org' + items[0]
             pattern = '<frame src="(http://ieeexplore.ieee.org.*?\.pdf.*?)" frameborder=0 />'
             items = search(full_text_pdf_url, pattern)
-
+            if len(items) == 0:
+                save_url(url, paper_tbd_f)
+                print 'Time out!'
+                return 
             pdf_url = items[0]
             pdf_f = directory + pdf_url.split('&')[-2].split('=')[-1] + '_' + pdf_url.split('&')[-1].split('=')[-1] + '.pdf'
 
@@ -316,7 +323,7 @@ def download(urls, directory):
             f.close()
             print "Download " + pdf_url + " complete!"
 
-download(iccv_urls, 'papers/iccv/')
+download(cvpr_urls, 'papers/cvpr/')
 
 '''
 for url in aaai_urls:
